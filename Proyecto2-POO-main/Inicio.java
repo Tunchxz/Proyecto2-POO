@@ -58,6 +58,14 @@ public class Inicio extends JFrame {
 		getContentPane().add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("Registrarse");
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				setVisible(false);
+				CrearUsuario venCrearUsuario = new CrearUsuario();
+				venCrearUsuario.setVisible(true);
+			}
+		});
 		btnNewButton_1.setBackground(new Color(255, 255, 255));
 		btnNewButton_1.setFont(new Font("Britannic Bold", Font.PLAIN, 18));
 		btnNewButton_1.setBounds(165, 337, 159, 50);
@@ -65,7 +73,7 @@ public class Inicio extends JFrame {
 		
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setForeground(new Color(0, 0, 0));
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\dulce\\OneDrive\\Escritorio\\Dulce\\Proyecto2-POO-main\\uvvgenda!.png"));
+		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\dulce\\OneDrive\\Escritorio\\Proyecto2\\Proyecto2\\uvvgenda!.png"));
 		lblNewLabel.setBounds(0, 0, 494, 530);
 		getContentPane().add(lblNewLabel);
 		

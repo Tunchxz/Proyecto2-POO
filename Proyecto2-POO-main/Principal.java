@@ -9,8 +9,9 @@ public class Principal {
         Boolean cicloMaster = true;
 
         UVGenda controlador = new UVGenda();
-        controlador.cargarUsuariosDesdeCSV("usuarios.csv");
-        controlador.cargarActividadesDesdeCSV("actividades.csv");
+        controlador.cargarUsuariosDesdeCSV();
+        System.out.println(controlador.usuarios);
+        controlador.cargarActividadesDesdeCSV();
 
         while (cicloMaster) {
             while (!salirMenuInicial) {
@@ -60,6 +61,7 @@ public class Principal {
                         System.out.println("\n[Sistema]: Gracias por usar UVGenda. ¡Ten un lindo día!");
                         break;
                     }
+                    
                     default:
                         System.out.println("\n[Sistema]: Error03. Por favor, ingresa una opción válida del menú.");
                         break;

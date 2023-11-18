@@ -3,14 +3,21 @@ import java.util.ArrayList;
 import java.io.*;
 
 public class UVGenda {
-    private ArrayList<Usuario> usuarios;
+    public ArrayList<Usuario> usuarios;
 
     public UVGenda() {
         this.usuarios = new ArrayList<Usuario>();
     }
+   
+    
+    public void cargarDatosDesdeCSV() {
+        cargarUsuariosDesdeCSV();
+        cargarActividadesDesdeCSV();
+    }
 
-    public void cargarUsuariosDesdeCSV(String archivo) {
-        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+
+    public void cargarUsuariosDesdeCSV() {
+        try (BufferedReader br = new BufferedReader(new FileReader("Usuarios.csv"))) {
             String linea;
             while ((linea = br.readLine()) != null) {
                 String[] partes = linea.split(";");
@@ -19,6 +26,8 @@ public class UVGenda {
                     String nombreUsuario = partes[1];
                     String contrasena = partes[2];
                     usuarios.add(new Usuario(idu, nombreUsuario, contrasena));
+                    
+                    System.out.println("Usuario cargado: " + nombreUsuario + ", Contraseña: " + contrasena);
                 }
             }
         } catch (IOException e) {
@@ -26,8 +35,8 @@ public class UVGenda {
         }
     }
 
-    public void cargarActividadesDesdeCSV(String archivo) {
-        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+    public void cargarActividadesDesdeCSV() {
+        try (BufferedReader br = new BufferedReader(new FileReader("Actividades.csv"))) {
             String linea;
             while ((linea = br.readLine()) != null) {
                 String[] partes = linea.split(";");
@@ -37,6 +46,7 @@ public class UVGenda {
                     String hora = partes[2];
                     String nombreActividad = partes[3];
                     boolean estado = Boolean.parseBoolean(partes[4]);
+                    System.out.println("Datos leídos: Nombre Usuario: " + nombreUsuario + ", Fecha: " + fecha + ", Hora: " + hora + ", Nombre Actividad: " + nombreActividad + ", Estado: " + estado);
 
                     Usuario usuarioEncontrado = null;
                     for (Usuario usuario : usuarios) {
@@ -47,9 +57,12 @@ public class UVGenda {
                     }
 
                     if (usuarioEncontrado != null) {
-                        usuarioEncontrado.getListaDeActividades()
-                                .add(new Actividad(fecha, hora, nombreActividad, estado));
+                        usuarioEncontrado.getListaDeActividades().add(new Actividad(fecha, hora, nombreActividad, estado));
+                        System.out.println("Actividad agregada para el usuario: " + usuarioEncontrado.getNombreUsuario());
+                        
                     }
+                }else {
+                	System.out.println("La línea no tiene el formato correcto: " + linea);
                 }
             }
         } catch (IOException e) {
@@ -58,7 +71,7 @@ public class UVGenda {
     }
 
     public void guardarUsuariosEnCSV(String archivo) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo))) {
+    	try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo, true))) {
             for (Usuario usuario : usuarios) {
                 bw.write(usuario.getIdu() + ";" + usuario.getNombreUsuario() + ";" + usuario.getContrasena());
                 bw.newLine();
@@ -69,7 +82,7 @@ public class UVGenda {
     }
 
     public void guardarActividadesEnCSV(String archivo) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo, true))) {
             for (Usuario usuario : usuarios) {
                 for (Actividad actividad : usuario.getListaDeActividades()) {
                     bw.write(usuario.getNombreUsuario() + ";" + actividad.getFecha() + ";" + actividad.getHora() + ";" +
@@ -83,10 +96,10 @@ public class UVGenda {
     }
 
     public boolean crearUsuario(String nombreUsuario, String contrasena) {
-        if (usuarios.isEmpty()) {
+    	if (usuarios.isEmpty()) {
             Usuario nuevoUsuario = new Usuario(1, nombreUsuario, contrasena);
             usuarios.add(nuevoUsuario);
-            guardarUsuariosEnCSV("usuarios.csv"); // Guardar al crear el primer usuario
+            guardarUsuariosEnCSV("usuarios.csv"); 
             return true;
         } else {
             for (Usuario usuario : usuarios) {
@@ -98,7 +111,7 @@ public class UVGenda {
             int ultimoID = usuarios.get(usuarios.size() - 1).getIdu();
             Usuario nuevoUsuario = new Usuario(ultimoID + 1, nombreUsuario, contrasena);
             usuarios.add(nuevoUsuario);
-            guardarUsuariosEnCSV("usuarios.csv"); // Guardar cuando se añade un nuevo usuario
+            guardarUsuariosEnCSV("usuarios.csv"); 
             return true;
         }
     }
@@ -112,16 +125,16 @@ public class UVGenda {
         return false;
     }
 
-    public String crearActividad(String fecha, String hora, String nombreActividad, String nombreUsuario) {
-        for (Usuario usuario : usuarios) {
+    public String crearActividad(String nombreUsuario, String hora, String nombreAct, String fecha) {
+    	for (Usuario usuario : usuarios) {
             if (usuario.getNombreUsuario().equals(nombreUsuario)) {
-                Actividad nuevaActividad = new Actividad(fecha, hora, nombreActividad, false);
+                Actividad nuevaActividad = new Actividad(fecha, hora, nombreAct, false);
                 usuario.getListaDeActividades().add(nuevaActividad);
-                guardarActividadesEnCSV("actividades.csv");
+                guardarActividadesEnCSV("Actividades.csv");
                 return "\n[Sistema]: Actividad registrada con éxito.";
             }
         }
-        return "\n[Sistema]: Error01. Problemas con el perfil del usuario";
+        return "\n[Sistema]: Error al registrar la actividad.";
     }
 
     public boolean validarListaActividades(String nombreUsuario) {
@@ -140,7 +153,7 @@ public class UVGenda {
                 String actividades = "\n--------------- Tu Lista de Actividades ---------------";
                 for (Actividad actividad : usuario.getListaDeActividades()) {
                     indice++;
-                    actividades += "\n" + indice + " " + actividad.toString();
+                    actividades += "\n" + indice + " " + actividad.getNombreActividad();
                 }
                 return actividades;
             }
@@ -227,5 +240,6 @@ public class UVGenda {
         }
         return "\n[Sistema]: Error01. Problemas con el perfil del usuario";
     }
+	
 
 }
