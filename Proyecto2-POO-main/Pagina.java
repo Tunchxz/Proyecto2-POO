@@ -124,6 +124,7 @@ public class Pagina extends JFrame {
 		tNombreUsuario.setBounds(171, 30, 226, 23);
 		contentPane.add(tNombreUsuario);
 		tNombreUsuario.setColumns(10);
+		controlador.cargarActividadesDesdeCSV();
 	}
 	
     

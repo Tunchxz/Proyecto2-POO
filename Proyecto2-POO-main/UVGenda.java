@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import java.io.*;
 
 public class UVGenda {
@@ -240,6 +242,4 @@ public class UVGenda {
         }
         return "\n[Sistema]: Error01. Problemas con el perfil del usuario";
     }
-	
-
 }

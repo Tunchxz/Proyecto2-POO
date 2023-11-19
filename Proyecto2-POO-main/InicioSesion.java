@@ -63,7 +63,7 @@ public class InicioSesion extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				UVGenda controlador = new UVGenda();
-				controlador.cargarUsuariosDesdeCSV(); 
+				controlador.cargarUsuariosDesdeCSV();
 				String usuario = tUsuario.getText();
                 String contrasena = new String(tContrasena.getPassword());
                 if (controlador.iniciarSesion(usuario, contrasena)) {
